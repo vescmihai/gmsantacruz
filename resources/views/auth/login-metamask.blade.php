@@ -19,6 +19,20 @@
             align-items: center;
             min-height: 100vh;
             background: #f0f2f5;
+            position: relative; 
+            flex-direction: column; 
+        }
+
+        .banner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 800px; 
+            background-image: url('{{ asset('bg.jpg') }}'); 
+            background-size: cover;
+            background-position: center;
+            z-index: -1; 
         }
 
         .container {
@@ -27,6 +41,7 @@
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem; 
         }
 
         h1 {
@@ -62,7 +77,20 @@
         .metamask-logo {
             width: 150px;
             margin: 1rem auto;
-            display: block; 
+            display: block;
+        }
+
+        .additional-images {
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            margin-bottom: 2rem; 
+        }
+
+        .additional-images img {
+            width: 80%; 
+            max-width: 400px; 
+            margin: 0.5rem 0; 
         }
 
         p {
@@ -82,9 +110,29 @@
             margin-top: 1rem;
             font-size: 0.9rem;
         }
+
+
+    .additional-images img:first-of-type {
+        width: 40%; 
+        max-width: 200px; 
+        margin: 0.5rem 0;
+    }
+    .additional-images img:not(:first-of-type) {
+        width: 80%;
+        max-width: 400px;
+        margin: 0.5rem 0;
+    }
+
     </style>
 </head>
 <body>
+    <div class="banner"></div> 
+
+    <div class="additional-images">
+        <img src="https://tramites-digitales.gmsantacruz.gob.bo/assets/images/blocks/hero/logo_sc.png" alt="Imagen 1"> 
+        <img src="https://tramites-digitales.gmsantacruz.gob.bo/assets/images/blocks/hero/logo_tramite.png" alt="Imagen 2"> 
+    </div>
+
     <div class="container">
         <h1>Autenticación con MetaMask</h1>
         <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask Logo" class="metamask-logo">
@@ -103,32 +151,34 @@
 
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
-        const loginButton = document.getElementById('loginButton');
-        const walletAddressInput = document.getElementById('walletAddress');
-        const loginForm = document.getElementById('loginForm');
-        const alertMessage = document.getElementById('alertMessage');
+    const loginButton = document.getElementById('loginButton');
+    const walletAddressInput = document.getElementById('walletAddress');
+    const loginForm = document.getElementById('loginForm');
+    const alertMessage = document.getElementById('alertMessage');
 
-        if (typeof window.ethereum !== 'undefined') {
-            const web3 = new Web3(window.ethereum);
+    if (typeof window.ethereum !== 'undefined') {
+        const web3 = new Web3(window.ethereum);
 
-            loginButton.addEventListener('click', async () => {
-                try {
-                    // Solicitar al usuario que conecte MetaMask
-                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-                    const walletAddress = accounts[0];
+        loginButton.addEventListener('click', async () => {
+            try {
+                // Solicitar al usuario que conecte MetaMask
+                const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                const walletAddress = accounts[0];
 
-                    // Asignar la dirección de MetaMask al campo oculto
-                    walletAddressInput.value = walletAddress;
+                // Asignar la dirección de MetaMask al campo oculto
+                walletAddressInput.value = walletAddress;
 
-                    // Enviar el formulario
-                    loginForm.submit();
-                } catch (error) {
-                    console.error('Error durante el inicio de sesión con MetaMask', error);
-                }
-            });
-        } else {
-            alertMessage.style.display = 'block';
-        }
-    </script>
+                // Redirigir a la página de información de la wallet
+                // window.location.href = `/wallet-info?address=${walletAddress}`; // Ajusta la ruta según tu configuración
+                window.location.href = `/licencias`;
+            } catch (error) {
+                console.error('Error durante el inicio de sesión con MetaMask', error);
+            }
+        });
+    } else {
+        alertMessage.style.display = 'block';
+    }
+</script>
+
 </body>
 </html>
