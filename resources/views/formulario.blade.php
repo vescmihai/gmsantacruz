@@ -21,18 +21,14 @@
             background-position: center;
             z-index: -1;
         }
-       
-    .btn-outline-primary {
-        border-color: #cccccc; 
-        color: #0d6efd; 
-    }
-
-    .btn-outline-primary:hover {
-        background-color: #0d6efd; 
-        color: #fff; 
-    }
-
-
+        .btn-outline-primary {
+            border-color: #cccccc; 
+            color: #0d6efd; 
+        }
+        .btn-outline-primary:hover {
+            background-color: #0d6efd; 
+            color: #fff; 
+        }
     </style>
 </head>
 <body>
@@ -83,15 +79,19 @@
                             <input type="text" class="form-control py-2" id="direccion" required>
                         </div>
 
-                        <div class="mb-3">
-                            <button type="button" class="btn btn-outline-primary w-100 py-2 mb-2">Documento de identidad Anverso</button>
-                            <button type="button" class="btn btn-outline-primary w-100 py-2">Documento de identidad Reverso</button>
-                        </div>
-
-                        <p class="text-muted mt-4">Los campos con (*) son obligatorios.</p>
-
-                        <button type="submit" class="btn btn-primary w-100 py-lg-3 py-md-2 py-2 shadow-sm mt-4">Enviar <i class="bi bi-check-circle-fill"></i></button>
+                        <button type="button" onclick="saveToBlockchain()" class="btn btn-primary w-100 py-lg-3 py-md-2 py-2 shadow-sm mt-4">
+                            Enviar <i class="bi bi-check-circle-fill"></i>
+                        </button>
                     </form>
+
+                    <!-- Espacio para mostrar datos recuperados -->
+                    <div id="datosRecuperados" class="mt-4" style="display: none;">
+                        <h5>Datos Recuperados:</h5>
+                        <p id="datosSolicitante"></p>
+                        <button type="button" onclick="fetchDataFromBlockchain()" class="btn btn-outline-primary w-100 py-lg-3 py-md-2 py-2 mt-3 shadow-sm">
+                            Recuperar Datos <i class="bi bi-box-arrow-down"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -99,9 +99,101 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="js/script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
     <script>
         AOS.init();
+
+        let web3;
+        let contract;
+
+        async function connectToBlockchain() {
+            if (window.ethereum) {
+                web3 = new Web3(window.ethereum);
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const contractAddress = '0x587A1f66Df73cca5ADB617AC8aaa165aA6177210';
+                const abi = [
+                    {
+                        "inputs": [
+                            { "internalType": "string", "name": "_tipo", "type": "string" },
+                            { "internalType": "string", "name": "_documento", "type": "string" },
+                            { "internalType": "string", "name": "_nombres", "type": "string" },
+                            { "internalType": "string", "name": "_primerApellido", "type": "string" },
+                            { "internalType": "string", "name": "_segundoApellido", "type": "string" },
+                            { "internalType": "string", "name": "_tercerApellido", "type": "string" },
+                            { "internalType": "string", "name": "_direccion", "type": "string" }
+                        ],
+                        "name": "guardarSolicitante",
+                        "outputs": [],
+                        "stateMutability": "nonpayable",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [
+                            { "internalType": "address", "name": "", "type": "address" }
+                        ],
+                        "name": "solicitantes",
+                        "outputs": [
+                            { "internalType": "string", "name": "tipo", "type": "string" },
+                            { "internalType": "string", "name": "documento", "type": "string" },
+                            { "internalType": "string", "name": "nombres", "type": "string" },
+                            { "internalType": "string", "name": "primerApellido", "type": "string" },
+                            { "internalType": "string", "name": "segundoApellido", "type": "string" },
+                            { "internalType": "string", "name": "tercerApellido", "type": "string" },
+                            { "internalType": "string", "name": "direccion", "type": "string" }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    }
+                ];
+
+                contract = new web3.eth.Contract(abi, contractAddress);
+            } else {
+                alert('Por favor, instala Metamask para usar esta aplicación.');
+            }
+        }
+
+        async function saveToBlockchain() {
+            const tipo = document.querySelector('input[name="tipoSolicitante"]:checked').value;
+            const documento = document.getElementById('documento').value;
+            const nombres = document.getElementById('nombres').value;
+            const primerApellido = document.getElementById('primerApellido').value;
+            const segundoApellido = document.getElementById('segundoApellido').value;
+            const tercerApellido = document.getElementById('tercerApellido').value;
+            const direccion = document.getElementById('direccion').value;
+
+            try {
+                const accounts = await web3.eth.getAccounts();
+                await contract.methods.guardarSolicitante(tipo, documento, nombres, primerApellido, segundoApellido, tercerApellido, direccion)
+                    .send({ from: accounts[0] });
+                alert('Datos guardados en la blockchain con éxito.');
+            } catch (error) {
+                console.error(error);
+                alert('Error al guardar los datos en la blockchain.');
+            }
+        }
+
+        async function fetchDataFromBlockchain() {
+            try {
+                const accounts = await web3.eth.getAccounts();
+                const data = await contract.methods.solicitantes(accounts[0]).call();
+                document.getElementById('datosSolicitante').innerText = `
+                    Tipo: ${data.tipo}
+                    Documento: ${data.documento}
+                    Nombres: ${data.nombres}
+                    Primer Apellido: ${data.primerApellido}
+                    Segundo Apellido: ${data.segundoApellido}
+                    Tercer Apellido: ${data.tercerApellido}
+                    Dirección: ${data.direccion}
+                `;
+                document.getElementById('datosRecuperados').style.display = 'block';
+            } catch (error) {
+                console.error(error);
+                alert('Error al recuperar los datos de la blockchain.');
+            }
+        }
+
+        // Conectar a la blockchain al cargar la página
+        window.onload = connectToBlockchain;
     </script>
 </body>
 </html>
