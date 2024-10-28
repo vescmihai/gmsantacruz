@@ -41,15 +41,15 @@
             <div class="col col-lg-5 col-md-7 col-12">
                 <div class="card shadow px-lg-5 px-md-5 px-5 py-5 rounded-4 border-0" data-aos="zoom-in">
                     <h3 class="text-center mb-5">Datos del Solicitante <i class="bi bi-person-fill"></i></h3>
-                    <form>
+                    <form id="solicitanteForm">
                         <div class="mb-3">
                             <label class="form-label">Tipo de Solicitante</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="tipoSolicitante" id="personalNatural" value="natural">
+                                <input class="form-check-input" type="radio" name="tipoSolicitante" id="personalNatural" value="natural" required>
                                 <label class="form-check-label" for="personalNatural">Personal Natural</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="tipoSolicitante" id="personaJuridica" value="juridica">
+                                <input class="form-check-input" type="radio" name="tipoSolicitante" id="personaJuridica" value="juridica" required>
                                 <label class="form-check-label" for="personaJuridica">Persona Jurídica</label>
                             </div>
                         </div>
@@ -82,6 +82,7 @@
                         <button type="button" onclick="saveToBlockchain()" class="btn btn-primary w-100 py-lg-3 py-md-2 py-2 shadow-sm mt-4">
                             Enviar <i class="bi bi-check-circle-fill"></i>
                         </button>
+
                     </form>
 
                     <!-- Espacio para mostrar datos recuperados -->
@@ -163,9 +164,12 @@
 
             try {
                 const accounts = await web3.eth.getAccounts();
-                await contract.methods.guardarSolicitante(tipo, documento, nombres, primerApellido, segundoApellido, tercerApellido, direccion)
-                    .send({ from: accounts[0] });
-                alert('Datos guardados en la blockchain con éxito.');
+                await contract.methods.guardarSolicitante(tipo, documento, nombres, primerApellido, segundoApellido, tercerApellido, direccion).send({ from: accounts[0] });
+
+                // Mostrar datos enviados
+                const datosSolicitante = `Tipo: ${tipo}, Documento: ${documento}, Nombres: ${nombres}, Primer Apellido: ${primerApellido}, Segundo Apellido: ${segundoApellido}, Tercer Apellido: ${tercerApellido}, Dirección: ${direccion}`;
+                document.getElementById('datosSolicitante').innerText = datosSolicitante;
+                document.getElementById('datosRecuperados').style.display = 'block'; // Mostrar sección de datos recuperados
             } catch (error) {
                 console.error(error);
                 alert('Error al guardar los datos en la blockchain.');
@@ -176,24 +180,18 @@
             try {
                 const accounts = await web3.eth.getAccounts();
                 const data = await contract.methods.solicitantes(accounts[0]).call();
-                document.getElementById('datosSolicitante').innerText = `
-                    Tipo: ${data.tipo}
-                    Documento: ${data.documento}
-                    Nombres: ${data.nombres}
-                    Primer Apellido: ${data.primerApellido}
-                    Segundo Apellido: ${data.segundoApellido}
-                    Tercer Apellido: ${data.tercerApellido}
-                    Dirección: ${data.direccion}
-                `;
-                document.getElementById('datosRecuperados').style.display = 'block';
+
+                // Mostrar datos recuperados
+                const datosSolicitante = `Tipo: ${data[0]}, Documento: ${data[1]}, Nombres: ${data[2]}, Primer Apellido: ${data[3]}, Segundo Apellido: ${data[4]}, Tercer Apellido: ${data[5]}, Dirección: ${data[6]}`;
+                document.getElementById('datosSolicitante').innerText = datosSolicitante;
             } catch (error) {
                 console.error(error);
                 alert('Error al recuperar los datos de la blockchain.');
             }
         }
 
-        // Conectar a la blockchain al cargar la página
-        window.onload = connectToBlockchain;
+        // Inicializar conexión al cargar la página
+        window.addEventListener('load', connectToBlockchain);
     </script>
 </body>
 </html>

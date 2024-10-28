@@ -3,6 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request; 
+use App\Http\Controllers\SolicitanteController;
+
+Route::get('/solicitante/datos', [SolicitanteController::class, 'show'])->name('solicitante.show');
+Route::post('/solicitante/save', [SolicitanteController::class, 'save'])->name('solicitante.save');
+
+
 
 // Para mostrar el formulario de login con MetaMask
 Route::get('/login-metamask', [AuthController::class, 'showLoginForm'])->name('login-metamask');
@@ -18,7 +24,7 @@ Route::get('/wallet-info', function (Request $request) {
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('ruta.principal');
 
 Route::get('/licencias', function () {
     return view('licencias');
