@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'pinata' => [
+        'api_key' => env('PINATA_API_KEY'),
+        'api_secret' => env('PINATA_API_SECRET'),
+    ],
+
 ];
