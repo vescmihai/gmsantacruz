@@ -1,0 +1,6 @@
+{
+  "name": "gmsantacruz",
+  "scripts": {
+    "postdeploy": "php artisan migrate"
+  }
+}
