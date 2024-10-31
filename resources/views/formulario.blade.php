@@ -311,7 +311,6 @@
 
                 const response = await fetch('{{ route('solicitante.uploadFile') }}', {
                     method: 'POST',
-                    redirect: 'follow',
                     body: formData,
                     headers: {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
