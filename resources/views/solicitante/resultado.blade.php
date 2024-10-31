@@ -38,14 +38,14 @@
         <div>
             <h3>Documento Anverso</h3>
             @if(isset($datos['documentoAnverso']))
-            <img src="{{ env('PINATA_GATEWAY') . '\/ipfs\/' . $datos['documentoAnverso'] }}" alt="Documento Anverso" style="max-width: 100%; height: auto;">
+            <img src="{{ env('PINATA_GATEWAY') . '/ipfs/' . $datos['documentoAnverso'] }}" alt="Documento Anverso" style="max-width: 100%; height: auto;">
             @else
             <p>No se ha adjuntado un documento anverso.</p>
             @endif
 
             <h3>Documento Reverso</h3>
             @if(isset($datos['documentoReverso']))
-            <img src="{{ env('PINATA_GATEWAY') . '\/ipfs\/' . $datos['documentoReverso'] }}" alt="Documento Reverso" style="max-width: 100%; height: auto;">
+            <img src="{{ env('PINATA_GATEWAY') . '/ipfs/' . $datos['documentoReverso'] }}" alt="Documento Reverso" style="max-width: 100%; height: auto;">
             @else
             <p>No se ha adjuntado un documento reverso.</p>
             @endif
