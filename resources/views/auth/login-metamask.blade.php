@@ -135,12 +135,15 @@
 
     <div class="container">
         <h1>Autenticación con MetaMask</h1>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask Logo" class="metamask-logo">
-        <button id="loginButton">Iniciar sesión con MetaMask</button>
-        <p>Conecte su billetera MetaMask para gestionar las licencias.</p>
-        <div class="link">
-            <p><a href="https://metamask.io/es/" target="_blank">¿No tienes MetaMask?</a>.</p>
+        <div id="metamaskForm">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/36/MetaMask_Fox.svg" alt="MetaMask Logo" class="metamask-logo">
+            <button id="loginButton">Iniciar sesión con MetaMask</button>
+            <p>Conecte su billetera MetaMask para gestionar las licencias.</p>
+            <div class="link">
+                <p><a href="https://metamask.io/es/" target="_blank">¿No tienes MetaMask?</a>.</p>
+            </div>
         </div>
+        <img id="loader" src="/images/loader.svg" alt="loader" width="70" style="display: none"/>
         <div id="alertMessage" class="alert" style="display: none;">MetaMask no está instalado!</div>
 
         <form id="loginForm" action="{{ route('login-metamask.post') }}" method="POST" style="display: none;">
@@ -155,12 +158,17 @@
     const walletAddressInput = document.getElementById('walletAddress');
     const loginForm = document.getElementById('loginForm');
     const alertMessage = document.getElementById('alertMessage');
+    const metamaskForm = document.getElementById('metamaskForm');
+    const loader = document.getElementById('loader');
 
     if (typeof window.ethereum !== 'undefined') {
         const web3 = new Web3(window.ethereum);
 
         loginButton.addEventListener('click', async () => {
             try {
+                metamaskForm.style.display = "none";
+                loader.style.display = "inline";
+
                 // Solicitar al usuario que conecte MetaMask
                 const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
                 const walletAddress = accounts[0];
@@ -168,10 +176,20 @@
                 // Asignar la dirección de MetaMask al campo oculto
                 walletAddressInput.value = walletAddress;
 
-                // Redirigir a la página de información de la wallet
+                // Login or create user
+                const response = await fetch(loginForm.action, {method:'post', body: new FormData(loginForm)});
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+
+                const json = await response.json();
+                console.log(json);
                 // window.location.href = `/wallet-info?address=${walletAddress}`; // Ajusta la ruta según tu configuración
                 window.location.href = `/licencias`;
             } catch (error) {
+                metamaskForm.style.display = "block";
+                loader.style.display = "none";
+
                 console.error('Error durante el inicio de sesión con MetaMask', error);
             }
         });
