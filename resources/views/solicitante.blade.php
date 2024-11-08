@@ -275,7 +275,8 @@
                          tercerApellido,
                          direccion,
                          documentoAnverso,
-                         documentoReverso
+                         documentoReverso,
+                         codigo: "{{ $codigo }}"
                      })
                  });
          

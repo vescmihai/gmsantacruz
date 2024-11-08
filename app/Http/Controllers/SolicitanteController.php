@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use App\Services\PinataService;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\TipoLicencia;
 use App\Models\Solicitante;
+use App\Models\Tramite;
 
 class SolicitanteController extends Controller
 {
@@ -50,8 +53,12 @@ class SolicitanteController extends Controller
             'direccion' => 'required|string',
             'documentoAnverso' => 'required|string',
             'documentoReverso' => 'required|string',
+            'codigo' => 'required|string'
         ]);
 
+        $tipoLicencia = TipoLicencia::where('codigo', $validatedData['codigo'])->first();
+
+        // Generar Solicitante
         $solicitante = Solicitante::create([
             'tipo' => $validatedData['tipoSolicitante'],
             'nro_documento' => $validatedData['documento'],
@@ -62,6 +69,14 @@ class SolicitanteController extends Controller
             'documento_anverso' => $validatedData['documentoAnverso'],
             'documento_reverso' => $validatedData['documentoReverso']
         ]);
+
+        // Generar Tramite
+        $tramite = new Tramite();
+        $tramite->codigo = Str::uuid();
+        $tramite->user_id = Auth::id();
+        $tramite->solicitante_id = $solicitante->id;
+        $tramite->tipo_licencia_id = $tipoLicencia->id;
+        $tramite->save();
 
         $request->session()->put('datos', $validatedData);
 
