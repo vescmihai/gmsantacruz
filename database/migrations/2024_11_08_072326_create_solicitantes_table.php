@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('nro_documento');
             $table->string('nombres');
             $table->string('primer_apellido');
-            $table->string('segundo_apellido');
-            $table->string('tercer_apellido');
+            $table->string('segundo_apellido')->nullable();
+            $table->string('tercer_apellido')->nullable();
             $table->string('documento_anverso');
             $table->string('documento_reverso');
             $table->timestamps();

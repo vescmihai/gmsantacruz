@@ -85,10 +85,13 @@
                         <input type="file" class="form-control py-2" id="documentoReverso" accept="image/*" required>
                      </div>
                   </form>
-                  <button type="button" onclick="connectToBlockchain(); saveToBlockchain()" class="btn btn-primary w-100 py-lg-3 py-md-2 py-2 shadow-sm mt-4">
+                  <button id="sendButton" type="button" onclick="connectToBlockchain(); saveToBlockchain()" class="btn btn-primary w-100 py-lg-3 py-md-2 py-2 shadow-sm mt-4">
                   Enviar <i class="bi bi-check-circle-fill"></i>
                   </button>
+                  <img id="loader" src="/images/loader.svg" alt="loader" width="70" style="margin: auto; display: none;"/>
                   </form>
+
+                  {{-- Formulario para obtener los datos --}}
                   <div id="datosRecuperados" class="mt-4" style="display: none;">
                      <h5>Datos Recuperados:</h5>
                      <p id="datosSolicitante"></p>
@@ -96,6 +99,7 @@
                      Recuperar Datos <i class="bi bi-box-arrow-down"></i>
                      </button>
                   </div>
+                  {{-- end comment --}}
                </div>
             </div>
          </div>
@@ -107,8 +111,13 @@
          
          let web3;
          let contract;
+         let loader;
+         let sendButton;
          
          async function connectToBlockchain() {
+            loader = document.querySelector('#loader');
+            sendButton = document.querySelector('#sendButton');
+
              if (window.ethereum) {
                  web3 = new Web3(window.ethereum);
                  await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -231,6 +240,9 @@
          }
          
          async function saveToBlockchain() {
+            sendButton.style.display = "none";
+            loader.style.display = "inline";
+
              try {
                  const tipoSolicitante = document.querySelector('input[name="tipoSolicitante"]:checked').value;
                  const documento = document.getElementById('documento').value;
@@ -277,6 +289,9 @@
                      alert('Error: ' + data.error);
                  }
              } catch (error) {
+                 sendButton.style.display = "block";
+                 loader.style.display = "none";
+
                  console.error('Error al guardar en blockchain:', error);
                  alert('Hubo un error al guardar los datos. Por favor, revisa la consola para más detalles.');
              }
@@ -312,6 +327,9 @@
                      return '';
                  }
              } catch (error) {
+                 sendButton.style.display = "block";
+                 loader.style.display = "none";
+
                  console.error('Error al cargar el archivo a IPFS:', error);
                  alert('Error al subir archivo a IPFS.');
                  return '';
@@ -320,6 +338,7 @@
          
          
          async function fetchDataFromBlockchain() {
+            // Funcion del Formulario para obtener los datos
              try {
                  const accounts = await web3.eth.getAccounts();
                  const data = await contract.methods.solicitantes(accounts[0]).call();
@@ -331,6 +350,7 @@
                  alert('Error al recuperar los datos de la blockchain.');
              }
          }
+
          window.addEventListener('load', connectToBlockchain);
       </script>
    </body>
