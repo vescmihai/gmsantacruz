@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Autenticación con MetaMask</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Datos del Tramite</title>
     <style>
         * {
             box-sizing: border-box;
@@ -108,6 +109,7 @@
     }
     </style>
 </head>
+
 <body>
     <div class="banner"></div>
 
@@ -115,36 +117,26 @@
         <img src="https://tramites-digitales.gmsantacruz.gob.bo/assets/images/blocks/hero/logo_sc.png" alt="Imagen 1"> <!-- Reemplaza con la URL de tu primera imagen -->
         <img src="https://tramites-digitales.gmsantacruz.gob.bo/assets/images/blocks/hero/logo_tramite.png" alt="Imagen 2"> <!-- Reemplaza con la URL de tu segunda imagen -->
     </div>
-
-    <div class="container">
-    <!-- Card 1: Licencia de Funcionamiento -->
+    <div class="container mt-5">
         <div class="card">
-            <div class="card-icon">&#x1F4C4;</div> <!-- Icono de documento en verde -->
-            <h2>Licencia de Funcionamiento</h2>
-            <p>Ingresa para iniciar los trámites de licencia de funcionamiento.</p>
-            <button class="card-button" 
-                @auth
-                onclick="window.location.href='{{ route('licencias') }}'"
-                @else
-                onclick="window.location.href='{{ route('login') }}'"
-                @endauth
-                >Ingresar
-            </button>
-        </div>
-
-        <!-- Card 2: Consultas -->
-        <div class="card">
-            <div class="card-icon">&#x1F50D;</div> <!-- Icono de lupa en verde -->
-            <h2>Consultas</h2>
-            <p>Ingresa para consultar tus trámites, hacer seguimiento y verificar en qué estado se encuentran.</p>
-            <button class="card-button" onclick="showTramiteStatus()">Consultar</button>
+        <h3>Datos Recuperados del Tramite</h3>
+        <ul class="list-group">
+            <li class="list-group-item"><strong>Código:</strong> {{ $tramite['codigo'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Fecha de solicitud:</strong> {{ $tramite['created_at']->format('d-m-Y h:i:s A') ?? 'No disponible' }}</li>
+        </ul>
+        <br/>
+        <h4>Datos del Solicitante</h4>
+        <ul class="list-group">    
+            <li class="list-group-item"><strong>Tipo:</strong> {{ $tramite['solicitante']['tipo'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Documento:</strong> {{ $tramite['solicitante']['nro_documento'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Nombres:</strong> {{ $tramite['solicitante']['nombres'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Primer Apellido:</strong> {{ $tramite['solicitante']['primer_apellido'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Segundo Apellido:</strong> {{ $tramite['solicitante']['segundo_apellido'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Tercer Apellido:</strong> {{ $tramite['solicitante']['tercer_apellido'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Dirección:</strong> {{ $tramite['solicitante']['direccion'] ?? 'No disponible' }}</li>
+        </ul>
         </div>
     </div>
-    <script>
-        function showTramiteStatus(){
-            const code = prompt('Introduzca su código de tramite');
-            window.location.href = "{{ route('tramite.consulta', '') }}" + '/' + code;
-        }
-    </script>
 </body>
+
 </html>

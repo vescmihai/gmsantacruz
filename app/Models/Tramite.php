@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 use App\Models\Solicitante;
 use App\Models\TipoLicencia;
@@ -20,15 +20,15 @@ class Tramite extends Model
         'tipo_licencia_id'
     ];
 
-    public function tipoLicencia(): HasOne {
-        return $this->hasOne(TipoLicencia::class);
+    public function tipoLicencia(): BelongsTo {
+        return $this->belongsTo(TipoLicencia::class);
     }
 
-    public function user(): HasOne {
-        return $this->hasOne(User::class);
+    public function user(): BelongsTo {
+        return $this->belongsTo(User::class);
     }
 
-    public function solicitante(): HasOne {
-        return $this->hasOne(Solicitante::class);
+    public function solicitante(): BelongsTo {
+        return $this->belongsTo(Solicitante::class);
     }
 }

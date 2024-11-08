@@ -66,6 +66,7 @@ class SolicitanteController extends Controller
             'primer_apellido' => $validatedData['primerApellido'],
             'segundo_apellido' => $validatedData['segundoApellido'],
             'tercer_apellido' => $validatedData['tercerApellido'],
+            'direccion' => $validatedData['direccion'],
             'documento_anverso' => $validatedData['documentoAnverso'],
             'documento_reverso' => $validatedData['documentoReverso']
         ]);

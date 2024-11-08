@@ -9,6 +9,7 @@ use App\Models\TipoLicencia;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SolicitanteController;
 use App\Http\Controllers\TipoLicenciaController;
+use App\Http\Controllers\TramiteController;
 
 // No login
 Route::get('/', function () {
@@ -46,5 +47,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/solicitante/save', [SolicitanteController::class, 'save'])->name('solicitante.save');
         Route::post('/solicitante/upload-file', [SolicitanteController::class, 'uploadFile'])->name('solicitante.uploadFile');
         Route::get('/solicitante/resultado', [SolicitanteController::class, 'guardarSolicitante'])->name('solicitante.resultado');
+
+        // Tramite
+        Route::get('/{codigo}', [TramiteController::class, 'consulta'])->name('tramite.consulta');
     });
 });
