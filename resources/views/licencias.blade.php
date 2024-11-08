@@ -119,53 +119,15 @@
     </div>
 
     <div class="container">
-        <!-- Card 1 -->
+        @foreach ($tipos as $tipo)
+        {{-- Cards --}}
         <div class="card">
-            <div class="card-icon">&#x1F4C4;</div> <!-- Documento -->
-            <h2>Licencia de Funcionamiento para el Servicio de Salud</h2>
-            <p>Empadronamiento de licencia de funcionamiento para actividades de servicio de salud humana: Farmacias, Odontólogos, Médicos, etc.</p>
-            <a href="{{ route('tipo') }}" class="card-button">Ingresar</a>
+            <div class="card-icon">{!! $tipo->icono !!}</div> <!-- Documento -->
+            <h2>{{ $tipo->nombre }}</h2>
+            <p>{{ $tipo->descripcion }}</p>
+            <a href="{{ route('tipo', ['codigo' => $tipo->codigo]) }}" class="card-button">Ingresar</a>
         </div>
-
-        <!-- Card 2 -->
-        <div class="card">
-            <div class="card-icon">&#x1F37A;</div> <!-- Bebidas -->
-            <h2>Licencia de Funcionamiento que expenden Bebidas Alcohólicas</h2>
-            <p>Empadronamiento de licencia de funcionamiento para actividades que expenden bebidas alcohólicas: Bares, Licorerías, etc.</p>
-            <a href="{{ route('tipo') }}" class="card-button">Ingresar</a>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="card">
-            <div class="card-icon">&#x1F33F;</div> <!-- Hoja -->
-            <h2>Licencia de Funcionamiento para venta de Hoja de Coca</h2>
-            <p>Empadronamiento de licencia de funcionamiento para la actividad específica de venta de hoja de coca.</p>
-            <a href="{{ route('tipo') }}" class="card-button">Ingresar</a>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="card">
-            <div class="card-icon">&#x1F35D;</div> <!-- Comida -->
-            <h2>Licencia de Funcionamiento para el Servicio de Comida</h2>
-            <p>Empadronamiento de licencia de funcionamiento para actividades de servicio de comida: Restaurantes, Pensiones, etc.</p>
-            <a href="{{ route('tipo') }}" class="card-button">Ingresar</a>
-        </div>
-
-        <!-- Card 5 -->
-        <div class="card">
-            <div class="card-icon">&#x1F453;</div> <!-- Óptica -->
-            <h2>Licencia de Funcionamiento para Ópticas</h2>
-            <p>Empadronamiento de licencia de funcionamiento para la actividad específica de ópticas.</p>
-            <a href="{{ route('tipo') }}" class="card-button">Ingresar</a>
-        </div>
-
-        <!-- Card 6 -->
-        <div class="card">
-            <div class="card-icon">&#x1F527;</div> <!-- Otros rubros -->
-            <h2>Licencia de Funcionamiento para otros rubros</h2>
-            <p>Empadronamiento de licencia de funcionamiento para otros rubros: Talleres mecánicos, tiendas de barrios, etc.</p>
-            <a href="{{ route('tipo') }}" class="card-button">Ingresar</a>
-        </div>
+        @endforeach
     </div>
 </body>
 </html>

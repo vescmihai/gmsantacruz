@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\TipoLicencia;
+
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SolicitanteController;
 
@@ -38,11 +40,11 @@ Route::group(['middleware' => 'auth'], function () {
     })->name('wallet-info');
 
     Route::get('/licencias', function () {
-        return view('licencias');
+        return view('licencias', ['tipos' => TipoLicencia::all()]);
     })->name('licencias');
 
-    Route::get('/tipo', function () {
-        return view('tipo'); 
+    Route::get('/tipo/{codigo?}', function (?string $codigo = 'otros') {
+        return view('tipo', ['codigo' => $codigo]);
     })->name('tipo');
 
     Route::get('/formulario', function () {
