@@ -122,7 +122,14 @@
             <div class="card-icon">&#x1F4C4;</div> <!-- Icono de documento en verde -->
             <h2>Licencia de Funcionamiento</h2>
             <p>Ingresa para iniciar los trámites de licencia de funcionamiento.</p>
-            <button class="card-button" onclick="window.location.href='login-metamask'">Ingresar</button>
+            <button class="card-button" 
+                @auth
+                onclick="window.location.href='{{ route('licencias') }}'"
+                @else
+                onclick="window.location.href='{{ route('login') }}'"
+                @endauth
+                >Ingresar
+            </button>
         </div>
 
         <!-- Card 2: Consultas -->

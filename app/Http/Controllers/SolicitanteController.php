@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Services\PinataService;
+
 use Illuminate\Http\Request;
+
+use App\Models\TipoLicencia;
 
 class SolicitanteController extends Controller
 {
@@ -12,6 +15,15 @@ class SolicitanteController extends Controller
     public function __construct(PinataService $pinataService)
     {
         $this->pinataService = $pinataService;
+    }
+
+    public function index(Request $request){
+        $codigoLicencia = $request->query('codigo', 'otros');
+        if(!!!TipoLicencia::where('codigo', $codigoLicencia)->first()){
+            $codigoLicencia = 'otros';
+        }
+
+        return view('solicitante', ['codigo' => $codigoLicencia]);
     }
 
     public function show(Request $request)

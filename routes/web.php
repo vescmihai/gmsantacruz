@@ -8,14 +8,11 @@ use App\Models\TipoLicencia;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SolicitanteController;
+use App\Http\Controllers\TipoLicenciaController;
 
 // No login
 Route::get('/', function () {
-    if(Auth::check()){
-        return redirect()->route('licencias');
-    } else {
-        return view('welcome');
-    }
+    return view('welcome');
 })->name('ruta.principal');
 
 Route::group(['middleware' => 'guest'], function () {
@@ -43,13 +40,9 @@ Route::group(['middleware' => 'auth'], function () {
         return view('licencias', ['tipos' => TipoLicencia::all()]);
     })->name('licencias');
 
-    Route::get('/tipo', function (?string $codigo = 'otros') {
-        return view('tipo', ['codigo' => $codigo]);
-    })->name('tipo');
+    Route::get('/tipo', [TipoLicenciaController::class, 'operations'])->name('tipo');
 
     Route::prefix('tramite')->group(function () {
-        Route::get('/solicitante', function (?string $codigo = 'otros') {
-            return view('solicitante', ['codigo' => $codigo]);
-        })->name('tramite.solicitante');
+        Route::get('/solicitante', [SolicitanteController::class, 'index'])->name('tramite.solicitante');
     });
 });
