@@ -282,10 +282,11 @@
          
                  const data = await response.json();
                  if (response.ok) {
-                     alert('Datos guardados en la blockchain.');
+                     prompt('Datos guardados en la blockchain\nPuede verificar su tramite con el siguiente código:', data.data);
                      document.getElementById('solicitanteForm').reset();
                      
-                     window.location.href = data.redirect;
+                    //  window.location.href = data.redirect;
+                     window.location.href = "{{ route('ruta.principal') }}";
                  } else {
                      alert('Error: ' + data.error);
                  }

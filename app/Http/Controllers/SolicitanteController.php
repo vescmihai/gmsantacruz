@@ -83,6 +83,7 @@ class SolicitanteController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Datos guardados correctamente.',
+            'data' => $tramite->codigo,
             'redirect' => route('solicitante.resultado') 
         ]);
     }
