@@ -43,12 +43,13 @@ Route::group(['middleware' => 'auth'], function () {
         return view('licencias', ['tipos' => TipoLicencia::all()]);
     })->name('licencias');
 
-    Route::get('/tipo/{codigo?}', function (?string $codigo = 'otros') {
+    Route::get('/tipo', function (?string $codigo = 'otros') {
         return view('tipo', ['codigo' => $codigo]);
     })->name('tipo');
 
-    Route::get('/formulario', function () {
-        return view('formulario');
-    })->name('formulario');
-
+    Route::prefix('tramite')->group(function () {
+        Route::get('/solicitante', function (?string $codigo = 'otros') {
+            return view('solicitante', ['codigo' => $codigo]);
+        })->name('tramite.solicitante');
+    });
 });

@@ -123,28 +123,28 @@
         <div class="card">
             <div class="card-icon">&#x1F5C3;</div> <!-- Nuevo Documento -->
             <h2>Nueva Licencia de Funcionamiento</h2>
-            <a href="{{ route('formulario') }}" class="card-button">Ingresar</a>
+            <a href="{{ route('tramite.solicitante', ['codigo' => $codigo]) }}" class="card-button">Ingresar</a>
         </div>
 
         <!-- Card 2 -->
         <div class="card">
             <div class="card-icon">&#x1F4C6;</div> <!-- Actualizar Documento -->
             <h2>Actualizar Licencia de Funcionamiento</h2>
-            <a href="{{ route('formulario') }}" class="card-button">Ingresar</a>
+            <a href="{{ route('tramite.solicitante', ['codigo' => $codigo]) }}" class="card-button">Ingresar</a>
         </div>
 
         <!-- Card 3 -->
         <div class="card">
             <div class="card-icon">&#x1F5D1;</div> <!-- Baja Documento -->
             <h2>Baja Licencia de Funcionamiento</h2>
-            <a href="{{ route('formulario') }}" class="card-button">Ingresar</a>
+            <a href="{{ route('tramite.solicitante', ['codigo' => $codigo]) }}" class="card-button">Ingresar</a>
         </div>
 
         <!-- Card 4 -->
         <div class="card">
             <div class="card-icon">&#x1F5D8;</div> <!-- Información -->
             <h2>Información para la baja por inactividad de Licencia de Funcionamiento</h2>
-            <a href="{{ route('formulario') }}" class="card-button">Ingresar</a>
+            <a href="{{ route('tramite.solicitante', ['codigo' => $codigo]) }}" class="card-button">Ingresar</a>
         </div>
     </div>
 </body>
