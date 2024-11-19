@@ -15,6 +15,7 @@ use App\Http\Controllers\TramiteController;
 Route::get('/', function () {
     return view('welcome');
 })->name('ruta.principal');
+Route::get('/{codigo}', [TramiteController::class, 'consulta'])->name('tramite.consulta');
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/login', function (){
@@ -49,6 +50,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/solicitante/resultado', [SolicitanteController::class, 'guardarSolicitante'])->name('solicitante.resultado');
 
         // Tramite
-        Route::get('/{codigo}', [TramiteController::class, 'consulta'])->name('tramite.consulta');
+        // Route::get('/{codigo}', [TramiteController::class, 'consulta'])->name('tramite.consulta');
     });
 });

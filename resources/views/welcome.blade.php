@@ -106,6 +106,10 @@
         max-width: 400px;
         margin: 0.5rem 0;
     }
+    .card-alert {
+        background: red;
+        font-size: bold;
+    }
     </style>
 </head>
 <body>
@@ -115,6 +119,14 @@
         <img src="https://tramites-digitales.gmsantacruz.gob.bo/assets/images/blocks/hero/logo_sc.png" alt="Imagen 1"> <!-- Reemplaza con la URL de tu primera imagen -->
         <img src="https://tramites-digitales.gmsantacruz.gob.bo/assets/images/blocks/hero/logo_tramite.png" alt="Imagen 2"> <!-- Reemplaza con la URL de tu segunda imagen -->
     </div>
+
+    @if(session('error'))
+        <div class="card card-alert">
+            <strong class="alert alert-danger">
+                {{ session('error') }}
+            </strong>
+        </div>
+    @endif
 
     <div class="container">
     <!-- Card 1: Licencia de Funcionamiento -->
@@ -143,7 +155,11 @@
     <script>
         function showTramiteStatus(){
             const code = prompt('Introduzca su código de tramite');
-            window.location.href = "{{ route('tramite.consulta', '') }}" + '/' + code;
+            if(code){
+                window.location.href = "{{ route('tramite.consulta', '') }}" + '/' + code;
+            } else {
+                alert('Debe llenar la casilla con algun código');
+            }   
         }
     </script>
 </body>
