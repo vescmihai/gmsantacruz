@@ -162,7 +162,7 @@
               Dashboard
             </a>
           </li>
-          <li class="nav-item">
+          {{-- <li class="nav-item">
             <a class="nav-link" href="/nohome">
               <span data-feather="file"></span>
               Orders
@@ -191,17 +191,71 @@
               <span data-feather="layers"></span>
               Integrations
             </a>
-          </li>
+          </li> --}}
         </ul>
       </div>
     </nav>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+      @if (session('message'))
+        <br/>
+        <div class="alert alert-success">
+          {{ session('message') }}
+        </div>
+      @endif
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Panel de administración</h1>
       </div>
 
-      <p>User: {{ $user }}</p>
+      <div class="table-responsive">
+        <table class="table table-striped table-sm">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Código</th>
+              <th scope="col">Tipo de Licencia</th>
+              <th scope="col">Solicitante</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($tramites as $tramite)
+            <form method="POST" action="{{ route('admin.changeTramiteState') }}">
+              <input name="tramiteId" type="hidden" value="{{ $tramite->id }}"/>
+              @csrf
+              <tr>
+                <td>{{ $loop->index + 1 }}</td>
+                <td>{{ $tramite->codigo }}</td>
+                <td>{{ $tramite->tipoLicencia->nombre }}</td>
+                <td>{{ $tramite->solicitante->nombres . " " . $tramite->solicitante->primer_apellido }}</td>
+                <td>
+                  <select class="form-select" name="estadoTramiteId">
+                    @foreach ($estadoTramites as $estadoTramite)
+                      <option 
+                        value="{{ $estadoTramite->id }}"
+                        @if ($estadoTramite->id == $tramite->estadoTramite->id)
+                        selected
+                        @endif
+                        >{{ $estadoTramite->nombre }}</option>       
+                    @endforeach
+                  </select>
+                </td>
+                <td>
+                  <button id="sendButton" type="submit" class="btn btn-primary">
+                    Cambiar Estado <i class="bi bi-check-circle-fill"></i>
+                 </button>
+                </td>
+              </tr>
+            </form>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+
+      {{-- <p>User: {{ $user }}</p> --}}
+      {{-- <p>Tramites: {{ $tramites }}</p> --}}
+      {{-- <p>Estado Tramites: {{ $estadoTramites }}</p> --}}
 
     </main>
   </div>
