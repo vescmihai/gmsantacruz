@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\TipoLicencia;
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SolicitanteController;
 use App\Http\Controllers\TipoLicenciaController;
@@ -18,6 +19,9 @@ Route::group(['middleware' => 'guest'], function () {
     })->name('login');
     Route::get('/login-metamask', [AuthController::class, 'showLoginForm'])->name('login-metamask'); // Muestra el formulario de login con MetaMask
     Route::post('/login-metamask', [AuthController::class, 'loginWithMetaMask'])->name('login-metamask.post'); // Maneja el login con MetaMask
+
+    Route::get('/admin', [AuthController::class, 'showAdminForm'])->name('login-admin');
+    Route::post('/admin', [AuthController::class, 'loginAdmin'])->name('login-admin.post');
 });
 
 // Login
@@ -47,6 +51,11 @@ Route::group(['middleware' => 'auth'], function () {
         // Tramite
         // Route::get('/{codigo}', [TramiteController::class, 'consulta'])->name('tramite.consulta');
     });
+
+    // Admin
+    Route::prefix('admin')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    });
 });
 
 // Any time
@@ -54,3 +63,4 @@ Route::get('/', function () {
     return view('welcome');
 })->name('ruta.principal');
 Route::get('/tramite/{codigo}', [TramiteController::class, 'consulta'])->name('tramite.consulta');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
