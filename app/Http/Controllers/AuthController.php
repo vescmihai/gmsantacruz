@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+
+use App\Models\Rol;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -22,11 +24,13 @@ class AuthController extends Controller
         $userAddress = $request->input('address');
 
         $user = User::where('wallet_address', $userAddress)->first();
+        $rol = Rol::where('name', 'cliente')->first();
 
         if (!$user) {
             $user = User::create([
                 'wallet_address' => $userAddress,
                 'name' => 'User_' . substr($userAddress, 0, 6), // Nombre temporal
+                'rol_id' => $rol->id
             ]);
         }
 

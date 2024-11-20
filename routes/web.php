@@ -12,11 +12,6 @@ use App\Http\Controllers\TipoLicenciaController;
 use App\Http\Controllers\TramiteController;
 
 // No login
-Route::get('/', function () {
-    return view('welcome');
-})->name('ruta.principal');
-Route::get('/{codigo}', [TramiteController::class, 'consulta'])->name('tramite.consulta');
-
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/login', function (){
         return redirect()->route('login-metamask');
@@ -53,3 +48,9 @@ Route::group(['middleware' => 'auth'], function () {
         // Route::get('/{codigo}', [TramiteController::class, 'consulta'])->name('tramite.consulta');
     });
 });
+
+// Any time
+Route::get('/', function () {
+    return view('welcome');
+})->name('ruta.principal');
+Route::get('/tramite/{codigo}', [TramiteController::class, 'consulta'])->name('tramite.consulta');
