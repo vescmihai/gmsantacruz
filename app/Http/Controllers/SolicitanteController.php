@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\TipoLicencia;
 use App\Models\Solicitante;
 use App\Models\Tramite;
+use App\Models\EstadoTramite;
 
 class SolicitanteController extends Controller
 {
@@ -57,6 +58,7 @@ class SolicitanteController extends Controller
         ]);
 
         $tipoLicencia = TipoLicencia::where('codigo', $validatedData['codigo'])->first();
+        $estadoTramite = EstadoTramite::where('nombre', 'Pendiente')->first();
 
         // Generar Solicitante
         $solicitante = Solicitante::create([
@@ -77,6 +79,7 @@ class SolicitanteController extends Controller
         $tramite->user_id = Auth::id();
         $tramite->solicitante_id = $solicitante->id;
         $tramite->tipo_licencia_id = $tipoLicencia->id;
+        $tramite->estado_tramite_id = $estadoTramite->id;
         $tramite->save();
 
         $request->session()->put('datos', $validatedData);

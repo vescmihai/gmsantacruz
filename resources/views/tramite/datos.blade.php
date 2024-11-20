@@ -123,6 +123,7 @@
         <ul class="list-group">
             <li class="list-group-item"><strong>Código:</strong> {{ $tramite['codigo'] ?? 'No disponible' }}</li>
             <li class="list-group-item"><strong>Fecha de solicitud:</strong> {{ $tramite['created_at']->format('d-m-Y h:i:s A') ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Estado:</strong> {{ $tramite['estadoTramite']['nombre'] ?? 'No disponible' }}</li>
         </ul>
         <br/>
         <h4>Datos del Solicitante</h4>

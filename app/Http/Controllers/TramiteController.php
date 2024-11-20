@@ -9,7 +9,7 @@ use App\Models\Tramite;
 class TramiteController extends Controller
 {
     public function consulta(Request $request){
-        $tramite = Tramite::with('solicitante')->where('codigo', $request->codigo)->first();
+        $tramite = Tramite::with('solicitante', 'estadoTramite')->where('codigo', $request->codigo)->first();
         if($tramite) {
             return view('tramite.datos', ['tramite' => $tramite]);
         } 

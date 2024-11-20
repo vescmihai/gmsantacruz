@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         // Call other migrations
         $this->call([
+            EstadoTramiteSeeder::class,
             TipoLicenciaSeeder::class,
             RolSeeder::class,
         ]);
