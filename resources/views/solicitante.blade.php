@@ -30,10 +30,40 @@
          background-color: #0d6efd; 
          color: #fff; 
          }
+         .card-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none; 
+            display: inline-block; 
+        }
+
+        .card-button:hover {
+            background-color: #218838;
+        }
+         .button-logout{
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.2rem 1rem;
+        }
       </style>
    </head>
    <body>
       <div class="banner"></div>
+
+    @auth
+        <button type="button" class="card-button button-logout" 
+            onclick="window.location.href='{{ route('logout') }}'">
+            <span>Salir</span>
+        </button>
+    @endauth
+
       <div class="container mt-5 position-relative" style="z-index: 1;">
          <div class="row justify-content-center">
             <div class="col col-lg-5 col-md-7 col-12">

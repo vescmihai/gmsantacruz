@@ -108,6 +108,12 @@
         .card-button:hover {
             background-color: #218838;
         }
+        .button-logout{
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.2rem 1rem;
+        }
     </style>
 </head>
 <body>
@@ -117,6 +123,13 @@
         <img src="https://tramites-digitales.gmsantacruz.gob.bo/assets/images/blocks/hero/logo_sc.png" alt="Imagen 1">
         <img src="https://tramites-digitales.gmsantacruz.gob.bo/assets/images/blocks/hero/logo_tramite.png" alt="Imagen 2">
     </div>
+
+    @auth
+        <button type="button" class="card-button button-logout" 
+            onclick="window.location.href='{{ route('logout') }}'">
+            <span>Salir</span>
+        </button>
+    @endauth
 
     <div class="container">
         @foreach ($tipos as $tipo)

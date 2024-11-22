@@ -110,6 +110,12 @@
         background: red;
         font-size: bold;
     }
+    .button-logout{
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.2rem 1rem;
+    }
     </style>
 </head>
 <body>
@@ -119,6 +125,13 @@
         <img src="https://tramites-digitales.gmsantacruz.gob.bo/assets/images/blocks/hero/logo_sc.png" alt="Imagen 1"> <!-- Reemplaza con la URL de tu primera imagen -->
         <img src="https://tramites-digitales.gmsantacruz.gob.bo/assets/images/blocks/hero/logo_tramite.png" alt="Imagen 2"> <!-- Reemplaza con la URL de tu segunda imagen -->
     </div>
+
+    @auth
+        <button type="button" class="card-button button-logout" 
+            onclick="window.location.href='{{ route('logout') }}'">
+            <span>Salir</span>
+        </button>
+    @endauth
 
     @if(session('error'))
         <div class="card card-alert">
