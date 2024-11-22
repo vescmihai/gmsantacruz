@@ -56,6 +56,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
         Route::post('/change-tramite-state', [AdminController::class, 'changeTramiteEstadoMain'])->name('admin.changeTramiteState');
+        Route::get('/funcionarios', [AdminController::class, 'getFuncionarios'])->name('admin.funcionarios');
+        
+        Route::prefix('tramite')->group(function () {
+            Route::get('/{id}', [AdminController::class, 'getTramite'])->name('admin.tramite.show');
+        });
     });
 });
 

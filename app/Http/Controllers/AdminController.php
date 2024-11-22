@@ -35,4 +35,25 @@ class AdminController extends Controller
 
         return redirect()->route('admin.dashboard')->with('message', 'Se cambio el estado del Tramite '. $tramite->codigo . ' a ' . $tramite->estadoTramite->nombre);
     }
+
+    public function getTramite(Request $request){
+        // Get User and Rol for Permission configuration
+        $user_id = Auth::id();
+        $user = User::with('rol')->find($user_id);
+
+        $tramite = Tramite::find($request->id);
+        
+        if($tramite){
+            return view('admin.tramite.show', [
+                'tramite' =>$tramite,
+                'user' => $user
+            ]);
+        } else {
+            return redirect()->route('admin.dashboard')->with('message', 'No existe el tramite seleccionado');
+        }
+    }
+
+    public function getFuncionarios(Request $requets) {
+        return;
+    }
 }
