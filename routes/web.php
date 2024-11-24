@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix('admin')->group(function () {
         Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
         Route::post('/change-tramite-state', [AdminController::class, 'changeTramiteEstadoMain'])->name('admin.changeTramiteState');
+        Route::post('/renew-tramite', [AdminController::class, 'renewTramite'])->name('admin.renewTramite');
        
         Route::prefix('funcionarios')->group(function () {
             Route::get('/', [AdminController::class, 'getFuncionarios'])->name('admin.funcionarios');

@@ -201,7 +201,11 @@
                 <td>{{ $loop->index + 1 }}</td>
                 <td>{{ $tramite->codigo }}</td>
                 <td>{{ $tramite->tipoLicencia->nombre }}</td>
-                <td>{{ date('Y-m-d', strtotime($tramite->valido_hasta)) }}</td>
+                <td>{{ date('Y-m-d', strtotime($tramite->valido_hasta)) }} @if ($tramite->valido_hasta > now())
+                  (Válido)
+                @else
+                  (Expirado)
+                @endif</td>
                 <td>
                   {{ $tramite->estadoTramite->nombre }}
                 </td>

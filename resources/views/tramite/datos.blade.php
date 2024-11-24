@@ -124,7 +124,11 @@
             <li class="list-group-item"><strong>Código:</strong> {{ $tramite['codigo'] ?? 'No disponible' }}</li>
             <li class="list-group-item"><strong>Fecha de solicitud:</strong> {{ $tramite['created_at']->format('Y-m-d') ?? 'No disponible' }}</li>
             <li class="list-group-item"><strong>Estado:</strong> {{ $tramite['estadoTramite']['nombre'] ?? 'No disponible' }}</li>
-            <li class="list-group-item"><strong>Válido hasta:</strong> {{ date('Y-m-d', strtotime($tramite['valido_hasta'])) ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Válido hasta:</strong> {{ date('Y-m-d', strtotime($tramite['valido_hasta'])) }} @if ($tramite['valido_hasta'] > now())
+                (Válido)
+              @else
+                (Expirado)
+              @endif</li>
         </ul>
         <br/>
         <h4>Datos del Solicitante</h4>

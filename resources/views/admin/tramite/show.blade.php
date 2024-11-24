@@ -205,9 +205,22 @@
             <li class="list-group-item"><strong>Código:</strong> {{ $tramite['codigo'] ?? 'No disponible' }}</li>
             <li class="list-group-item"><strong>Fecha de solicitud:</strong> {{ $tramite['created_at']->format('Y-m-d') ?? 'No disponible' }}</li>
             <li class="list-group-item"><strong>Estado:</strong> {{ $tramite['estadoTramite']['nombre'] ?? 'No disponible' }}</li>
-            <li class="list-group-item"><strong>Válido hasta:</strong> {{ date('Y-m-d', strtotime($tramite['valido_hasta'])) ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Válido hasta:</strong> {{ date('Y-m-d', strtotime($tramite['valido_hasta'])) }} @if ($tramite['valido_hasta'] > now())
+              (Válido)
+            @else
+              (Expirado)
+            @endif</li>
         </ul>
-        <br/>
+
+        <div class="d-flex flex-row my-2">
+          <form method="POST" action="{{ route('admin.renewTramite') }}" class="mx-2">
+            <input name="tramiteId" type="hidden" value="{{ $tramite->id }}"/>
+            @csrf
+            <button id="sendButton" type="submit" class="btn btn-primary">Renovar Licencia <i class="bi bi-check-circle-fill"></i>
+            </button>
+          </form>
+        </div>
+
         <h4>Datos del Solicitante</h4>
         <ul class="list-group">    
             <li class="list-group-item"><strong>Tipo:</strong> {{ $tramite['solicitante']['tipo'] ?? 'No disponible' }}</li>

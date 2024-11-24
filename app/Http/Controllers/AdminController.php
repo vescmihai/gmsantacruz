@@ -38,6 +38,15 @@ class AdminController extends Controller
         return redirect()->route('admin.dashboard')->with('message', 'Se cambio el estado del Tramite '. $tramite->codigo . ' a ' . $tramite->estadoTramite->nombre);
     }
 
+    public function renewTramite(Request $request) {
+        // Update Tramite state
+        $tramite = Tramite::find($request->tramiteId);
+        $tramite->valido_hasta = now()->addYear();
+        $tramite->save();
+
+        return redirect()->route('admin.dashboard')->with('message', 'Se renovó la validez del Tramite '. $tramite->codigo);
+    }
+
     public function getTramite(Request $request){
         // Get User and Rol for Permission configuration
         $user_id = Auth::id();
