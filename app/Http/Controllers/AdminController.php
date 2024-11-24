@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 use App\Models\EstadoTramite;
+use App\Models\Rol;
 use App\Models\Tramite;
 use App\Models\User;
 
@@ -54,6 +58,51 @@ class AdminController extends Controller
     }
 
     public function getFuncionarios(Request $requets) {
-        return;
+        // Get User and Rol for Permission configuration
+        $user_id = Auth::id();
+        $user = User::with('rol')->find($user_id);
+
+        $funcionarios = User::whereHas('rol', function(Builder $query){
+            $query->where('name', 'funcionario');
+        })->get();
+
+        return view('admin.funcionario.index', [
+            'funcionarios' => $funcionarios,
+            'user' => $user
+        ]);
+    }
+
+    public function createFuncionarios(Request $request) {
+        // Get User and Rol for Permission configuration
+        $user_id = Auth::id();
+        $user = User::with('rol')->find($user_id);
+
+        return view('admin.funcionario.create')->with('user', $user);
+    }
+
+    public function storeFuncionarios(Request $request) {
+        $validatedData = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+        $funcionario_rol = Rol::where('name', 'funcionario')->first();
+
+        try {
+            $funcionario = User::create([
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['password']),
+                'rol_id' => $funcionario_rol->id,
+                'wallet_address' => '0x' . Str::random(12),
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            return redirect()->route('admin.funcionarios')->with('message', 'Funcionario creado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.funcionarios')->with('error', 'Error con los datos ingresados.');
+        }
     }
 }
