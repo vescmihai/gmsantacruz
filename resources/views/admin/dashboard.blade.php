@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard Template · Bootstrap v5.0</title>
+    <title>Admin - Trámites</title>
 
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -180,7 +180,7 @@
         </div>
       @endif
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Panel de administración</h1>
+        <h1 class="h2">Panel de Trámites</h1>
       </div>
 
       <div class="table-responsive">
@@ -190,7 +190,7 @@
               <th scope="col">#</th>
               <th scope="col">Código</th>
               <th scope="col">Tipo de Licencia</th>
-              <th scope="col">Solicitante</th>
+              <th scope="col">Válido hasta</th>
               <th scope="col">Estado</th>
               <th scope="col">Acción</th>
             </tr>
@@ -201,7 +201,7 @@
                 <td>{{ $loop->index + 1 }}</td>
                 <td>{{ $tramite->codigo }}</td>
                 <td>{{ $tramite->tipoLicencia->nombre }}</td>
-                <td>{{ $tramite->solicitante->nombres . " " . $tramite->solicitante->primer_apellido }}</td>
+                <td>{{ date('Y-m-d', strtotime($tramite->valido_hasta)) }}</td>
                 <td>
                   {{ $tramite->estadoTramite->nombre }}
                 </td>

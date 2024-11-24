@@ -80,6 +80,7 @@ class SolicitanteController extends Controller
         $tramite->solicitante_id = $solicitante->id;
         $tramite->tipo_licencia_id = $tipoLicencia->id;
         $tramite->estado_tramite_id = $estadoTramite->id;
+        $tramite->valido_hasta = now()->addYear();
         $tramite->save();
 
         $request->session()->put('datos', $validatedData);

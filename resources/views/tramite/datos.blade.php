@@ -122,8 +122,9 @@
         <h3>Datos Recuperados del Tramite</h3>
         <ul class="list-group">
             <li class="list-group-item"><strong>Código:</strong> {{ $tramite['codigo'] ?? 'No disponible' }}</li>
-            <li class="list-group-item"><strong>Fecha de solicitud:</strong> {{ $tramite['created_at']->format('d-m-Y h:i:s A') ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Fecha de solicitud:</strong> {{ $tramite['created_at']->format('Y-m-d') ?? 'No disponible' }}</li>
             <li class="list-group-item"><strong>Estado:</strong> {{ $tramite['estadoTramite']['nombre'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Válido hasta:</strong> {{ date('Y-m-d', strtotime($tramite['valido_hasta'])) ?? 'No disponible' }}</li>
         </ul>
         <br/>
         <h4>Datos del Solicitante</h4>

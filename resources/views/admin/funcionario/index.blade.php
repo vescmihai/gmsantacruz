@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard Template · Bootstrap v5.0</title>
+    <title>Admin - Lista de Funcionarios</title>
 
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -211,7 +211,7 @@
                 <td>{{ $loop->index + 1 }}</td>
                 <td>{{ $funcionario->name }}</td>
                 <td>{{ $funcionario->email }}</td>
-                <td>{{ $funcionario->created_at }}</td>
+                <td>{{ date('Y-m-d', strtotime($funcionario->created_at)) }}</td>
               </tr>
             @endforeach
           </tbody>

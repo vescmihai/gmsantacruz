@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard Template · Bootstrap v5.0</title>
+    <title>Datos del Trámite</title>
 
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -203,8 +203,9 @@
         <h3>Datos Recuperados del Tramite</h3>
         <ul class="list-group">
             <li class="list-group-item"><strong>Código:</strong> {{ $tramite['codigo'] ?? 'No disponible' }}</li>
-            <li class="list-group-item"><strong>Fecha de solicitud:</strong> {{ $tramite['created_at']->format('d-m-Y h:i:s A') ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Fecha de solicitud:</strong> {{ $tramite['created_at']->format('Y-m-d') ?? 'No disponible' }}</li>
             <li class="list-group-item"><strong>Estado:</strong> {{ $tramite['estadoTramite']['nombre'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Válido hasta:</strong> {{ date('Y-m-d', strtotime($tramite['valido_hasta'])) ?? 'No disponible' }}</li>
         </ul>
         <br/>
         <h4>Datos del Solicitante</h4>

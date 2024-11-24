@@ -16,6 +16,7 @@ class Tramite extends Model
 
     protected $fillable = [
         'codigo',
+        'valido_hasta',
         'user_id',
         'solicitante_id',
         'tipo_licencia_id',
