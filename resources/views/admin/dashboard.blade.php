@@ -197,9 +197,6 @@
           </thead>
           <tbody>
             @foreach ($tramites as $tramite)
-            {{-- <form method="POST" action="{{ route('admin.changeTramiteState') }}">
-              <input name="tramiteId" type="hidden" value="{{ $tramite->id }}"/>
-              @csrf --}}
               <tr>
                 <td>{{ $loop->index + 1 }}</td>
                 <td>{{ $tramite->codigo }}</td>
@@ -207,33 +204,15 @@
                 <td>{{ $tramite->solicitante->nombres . " " . $tramite->solicitante->primer_apellido }}</td>
                 <td>
                   {{ $tramite->estadoTramite->nombre }}
-                  {{-- <select class="form-select" name="estadoTramiteId">
-                    @foreach ($estadoTramites as $estadoTramite)
-                      <option 
-                        value="{{ $estadoTramite->id }}"
-                        @if ($estadoTramite->id == $tramite->estadoTramite->id)
-                        selected
-                        @endif
-                        >{{ $estadoTramite->nombre }}</option>
-                    @endforeach
-                  </select> --}}
                 </td>
                 <td>
                   <a href="{{ route('admin.tramite.show', ['id' => $tramite->id]) }}">Ver Tramite</a>
-                  {{-- <button id="sendButton" type="submit" class="btn btn-primary">
-                    Cambiar Estado <i class="bi bi-check-circle-fill"></i>
-                 </button> --}}
                 </td>
               </tr>
-            {{-- </form> --}}
             @endforeach
           </tbody>
         </table>
       </div>
-
-      {{-- <p>User: {{ $user }}</p> --}}
-      {{-- <p>Tramites: {{ $tramites }}</p> --}}
-      {{-- <p>Estado Tramites: {{ $estadoTramites }}</p> --}}
 
     </main>
   </div>

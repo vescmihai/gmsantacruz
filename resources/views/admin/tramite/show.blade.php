@@ -183,6 +183,43 @@
         <h1 class="h2">Tramite #{{ $tramite->id }}</h1>
       </div>
 
+      <div class="d-flex flex-row m-2">
+      @foreach ($estadoTramites as $estadoTramite)
+        @if ($estadoTramite->id != $tramite->estadoTramite->id)
+          <form method="POST" action="{{ route('admin.changeTramiteState') }}" class="mx-2">
+            <input name="tramiteId" type="hidden" value="{{ $tramite->id }}"/>
+            <input name="estadoTramiteId" type="hidden" value="{{ $estadoTramite->id }}"/>
+            @csrf
+            <button id="sendButton" type="submit" class="btn btn-dark" style="background-color: {{ $estadoTramite->color }}">
+              {{ $estadoTramite->nombre }} <i class="bi bi-check-circle-fill"></i>
+            </button>
+          </form>
+        @endif
+      @endforeach
+      </div>
+
+      <div class="container">
+        <div>
+        <h3>Datos Recuperados del Tramite</h3>
+        <ul class="list-group">
+            <li class="list-group-item"><strong>Código:</strong> {{ $tramite['codigo'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Fecha de solicitud:</strong> {{ $tramite['created_at']->format('d-m-Y h:i:s A') ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Estado:</strong> {{ $tramite['estadoTramite']['nombre'] ?? 'No disponible' }}</li>
+        </ul>
+        <br/>
+        <h4>Datos del Solicitante</h4>
+        <ul class="list-group">    
+            <li class="list-group-item"><strong>Tipo:</strong> {{ $tramite['solicitante']['tipo'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Documento:</strong> {{ $tramite['solicitante']['nro_documento'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Nombres:</strong> {{ $tramite['solicitante']['nombres'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Primer Apellido:</strong> {{ $tramite['solicitante']['primer_apellido'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Segundo Apellido:</strong> {{ $tramite['solicitante']['segundo_apellido'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Tercer Apellido:</strong> {{ $tramite['solicitante']['tercer_apellido'] ?? 'No disponible' }}</li>
+            <li class="list-group-item"><strong>Dirección:</strong> {{ $tramite['solicitante']['direccion'] ?? 'No disponible' }}</li>
+        </ul>
+        </div>
+    </div>
+
     </main>
   </div>
 </div>

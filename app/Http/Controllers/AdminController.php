@@ -18,12 +18,10 @@ class AdminController extends Controller
 
         // TODO: Mejorar el panel. Enviando los tramites para cambiarlos de estado
         $tramites = Tramite::with('estadoTramite', 'solicitante', 'tipoLicencia')->get();
-        $estadoTramites = EstadoTramite::get();
 
         return view('admin.dashboard', [
             'user' => $user,
             'tramites' => $tramites,
-            'estadoTramites' => $estadoTramites
         ]);
     }
 
@@ -41,11 +39,13 @@ class AdminController extends Controller
         $user_id = Auth::id();
         $user = User::with('rol')->find($user_id);
 
-        $tramite = Tramite::find($request->id);
+        $tramite = Tramite::with('estadoTramite', 'solicitante', 'tipoLicencia')->find($request->id);
+        $estadoTramites = EstadoTramite::get();
         
         if($tramite){
             return view('admin.tramite.show', [
-                'tramite' =>$tramite,
+                'tramite' => $tramite,
+                'estadoTramites' => $estadoTramites,
                 'user' => $user
             ]);
         } else {
