@@ -72,4 +72,6 @@ Route::group(['middleware' => 'auth'], function () {
 // Any time
 Route::get('/', [HomeController::class, 'home'])->name('ruta.principal');
 Route::get('/tramite/{codigo}', [TramiteController::class, 'consulta'])->name('tramite.consulta');
+Route::post('/licencia/upload-file', [SolicitanteController::class, 'uploadFile'])->name('licencia.uploadFile');
+Route::post('/licencia/verificar', [TramiteController::class, 'licenciaVerificar'])->name('licencia.verificar');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

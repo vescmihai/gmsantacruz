@@ -259,8 +259,36 @@
             <div class="card-icon">&#x1F50D;</div> <!-- Icono de lupa en verde -->
             <h2>Consultas</h2>
             <p>Ingresa para consultar tus trámites, hacer seguimiento y verificar en qué estado se encuentran.</p>
-            <button class="card-button" onclick="showTramiteStatus()">Consultar</button>
+            <div class="button-options">
+                <button class="card-button" onclick="showTramiteStatus()">Consultar Trámite</button>
+                <button class="card-button bg-dark" data-bs-toggle="modal" data-bs-target="#tramiteModal">Validar Licencia</button>
+            </div>
         </div>
+        
+        <!-- Modal Tramites -->
+        <div class="modal fade" id="tramiteModal" tabindex="-1" aria-labelledby="tramiteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="tramiteModalLabel">Validar Licencia</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form class="d-flex flex-column" id="licenciaForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                           <label for="licencia" class="form-label">Licencia (*)</label>
+                           <input type="file" class="form-control py-2" id="licencia" accept="application/pdf" required>
+                        </div>
+                        <button id="sendButton" onclick="submitLicencia()" type="button" class="btn btn-primary w-100 py-lg-3 py-md-2 py-2 shadow-sm mt-4">
+                            Subir y comprobar <i class="bi bi-check-circle-fill"></i>
+                        </button>
+                        <img id="loader" src="/images/loader.svg" alt="loader" width="70" style="margin: auto; display: none;"/>
+                    </form>
+                </div>
+            </div>
+            </div>
+        </div>
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -271,6 +299,77 @@
             } else {
                 alert('Debe llenar la casilla con algun código');
             }   
+        }
+
+        async function submitLicencia() {
+            const sendButton = document.querySelector("#sendButton");
+            const loader = document.querySelector("#loader");
+            const licencia = document.querySelector("#licencia");
+
+            sendButton.style.display = "none";
+            loader.style.display = "inline";
+
+            try {
+                const file = licencia.files[0];
+         
+                if (!file) {
+                    alert('Por favor, selecciona un archivo.');
+                    return '';
+                }
+         
+                const formData = new FormData();
+                formData.append('file', file);
+         
+                const response = await fetch("{{ route('licencia.uploadFile') }}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                });
+         
+                const data = await response.json();
+                if (response.ok) {
+                    // Validar con la lista de tramites
+                    const responseLicencia = await fetch("{{ route('licencia.verificar') }}", {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            licenciaVerificada: data.ipfsHash
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    });
+
+                    const dataResponse = await responseLicencia.json();
+                    if(responseLicencia.ok){
+                        // Mostrar mensaje de licencia encontrada
+                        alert('Licencia Encotrada y verificada');
+                        window.location.href = "{{ route('tramite.consulta', '') }}" + '/' + dataResponse.licencia['tramite']['codigo'];
+                    } else {
+                        // Mostrar mensaje de licencia NO encontrada
+                        alert('Error al verificar la licencia: ' + dataResponse.error);
+                        
+                        sendButton.style.display = "block";
+                        loader.style.display = "none";
+                        return '';
+                    }
+                } else {
+                    alert('Error al subir archivo a IPFS: ' + data.error);
+                    
+                    sendButton.style.display = "block";
+                    loader.style.display = "none";
+                    return '';
+                }
+            } catch (error) {
+                sendButton.style.display = "block";
+                loader.style.display = "none";
+
+                console.error('Error al cargar el archivo a IPFS:', error);
+                alert('Error al subir archivo a IPFS.');
+                return '';
+            }
         }
     </script>
 </body>
