@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 use App\Models\EstadoTramite;
+use App\Models\Notificacion;
 use App\Models\Rol;
 use App\Models\Tramite;
 use App\Models\User;
@@ -21,7 +22,7 @@ class AdminController extends Controller
         $user = User::with('rol')->find($user_id);
 
         // TODO: Mejorar el panel. Enviando los tramites para cambiarlos de estado
-        $tramites = Tramite::with('estadoTramite', 'solicitante', 'tipoLicencia')->get();
+        $tramites = Tramite::with('estadoTramite', 'solicitante', 'tipoLicencia')->orderBy('id', 'DESC')->get();
 
         return view('admin.dashboard', [
             'user' => $user,
@@ -35,7 +36,21 @@ class AdminController extends Controller
         $tramite->estado_tramite_id = $request->estadoTramiteId;
         $tramite->save();
 
-        return redirect()->route('admin.dashboard')->with('message', 'Se cambio el estado del Tramite '. $tramite->codigo . ' a ' . $tramite->estadoTramite->nombre);
+        if($request->mensaje) {
+            $estadoTramite = EstadoTramite::find($request->estadoTramiteId);
+
+            $notificacion = new Notificacion();
+            $notificacion->titulo = "Su trámite ha sido " . $estadoTramite->nombre;
+            $notificacion->mensaje = $request->mensaje;
+            $notificacion->user_id = $tramite->user_id;
+            $notificacion->save();
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Se cambio el estado del Tramite '. $tramite->codigo . ' a ' . $tramite->estadoTramite->nombre,
+            'redirect' => route('admin.dashboard')
+        ]);
     }
 
     public function renewTramite(Request $request) {
@@ -53,7 +68,13 @@ class AdminController extends Controller
         $user = User::with('rol')->find($user_id);
 
         $tramite = Tramite::with('estadoTramite', 'solicitante', 'tipoLicencia')->find($request->id);
-        $estadoTramites = EstadoTramite::get();
+        
+        // Solo mostrar otras opciones si esta en pendiente
+        if($tramite->estadoTramite->nombre == 'Pendiente'){
+            $estadoTramites = EstadoTramite::get();
+        } else {
+            $estadoTramites = [];
+        }
         
         if($tramite){
             return view('admin.tramite.show', [

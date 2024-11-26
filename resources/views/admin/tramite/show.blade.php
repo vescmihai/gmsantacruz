@@ -186,7 +186,7 @@
       <div class="d-flex flex-row m-2">
       @foreach ($estadoTramites as $estadoTramite)
         @if ($estadoTramite->id != $tramite->estadoTramite->id)
-          <form method="POST" action="{{ route('admin.changeTramiteState') }}" class="mx-2">
+          <form method="POST" action="{{ route('admin.changeTramiteState') }}" class="mx-2" onsubmit="changeState(event)">
             <input name="tramiteId" type="hidden" value="{{ $tramite->id }}"/>
             <input name="estadoTramiteId" type="hidden" value="{{ $estadoTramite->id }}"/>
             @csrf
@@ -216,7 +216,7 @@
           <form method="POST" action="{{ route('admin.renewTramite') }}" class="mx-2">
             <input name="tramiteId" type="hidden" value="{{ $tramite->id }}"/>
             @csrf
-            <button id="sendButton" type="submit" class="btn btn-primary">Renovar Licencia <i class="bi bi-check-circle-fill"></i>
+            <button id="sendButton" type="submit" class="btn btn-primary">Renovar Validez <i class="bi bi-check-circle-fill"></i>
             </button>
           </form>
         </div>
@@ -240,5 +240,36 @@
 
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+      <script>
+        async function changeState(event){
+          event.preventDefault();
+
+          const mensaje = prompt('Introduzca un mensaje para notificar a la persona que solicitó la licencia de funcionamiento sobre el estado ' + event.target.sendButton.innerText);
+            if(mensaje){
+              const response = await fetch("{{ route('admin.changeTramiteState') }}", {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-TOKEN': event.target._token.value
+                },
+                body: JSON.stringify({
+                  tramiteId: event.target.tramiteId.value,
+                  estadoTramiteId: event.target.estadoTramiteId.value,
+                  mensaje
+                })
+              });
+         
+              const data = await response.json();
+              if (response.ok) {
+                alert(data.message);
+                window.location.href = data.redirect;
+              } else {
+                alert('Error: ' + data.error);
+              }
+            } else {
+              alert('Debe llenar la casilla con algun mensaje');
+            }
+        }
+      </script>
   </body>
 </html>

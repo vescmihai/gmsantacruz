@@ -30,8 +30,8 @@ class SolicitanteController extends Controller
         }
 
         $user = Auth::user();
-        $tramites = Tramite::with('estadoTramite', 'tipoLicencia')->where('user_id', $user->id)->get();
-        $notificaciones = Notificacion::where('user_id', $user->id)->get();
+        $tramites = Tramite::with('estadoTramite', 'tipoLicencia')->where('user_id', $user->id)->orderBy('id', 'DESC')->get();
+        $notificaciones = Notificacion::where('user_id', $user->id)->orderBy('id', 'DESC')->limit(5)->get();
 
         return view('solicitante', compact('codigo', 'tramites', 'notificaciones'));
     }
@@ -87,6 +87,14 @@ class SolicitanteController extends Controller
         $tramite->estado_tramite_id = $estadoTramite->id;
         $tramite->valido_hasta = now()->addYear();
         $tramite->save();
+
+        // Generar notificacion
+        $notificacion = new Notificacion();
+        $notificacion->titulo = "Trámite creado";
+        $notificacion->mensaje = "Solicitud ingresada para la generacion de " . $tipoLicencia->nombre . ". Puedes hacer seguimiento con el siguiente código: " . $tramite->codigo;
+        $notificacion->enlace = route('tramite.consulta', ['codigo' => $tramite->codigo]);
+        $notificacion->user_id = Auth::id();
+        $notificacion->save();
 
         $request->session()->put('datos', $validatedData);
 

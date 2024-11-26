@@ -18,8 +18,8 @@ class TipoLicenciaController extends Controller
         }
 
         $user = Auth::user();
-        $tramites = Tramite::with('estadoTramite', 'tipoLicencia')->where('user_id', $user->id)->get();
-        $notificaciones = Notificacion::where('user_id', $user->id)->get();
+        $tramites = Tramite::with('estadoTramite', 'tipoLicencia')->where('user_id', $user->id)->orderBy('id', 'DESC')->get();
+        $notificaciones = Notificacion::where('user_id', $user->id)->orderBy('id', 'DESC')->limit(5)->get();
 
         return view('tipo', compact('codigo', 'tramites', 'notificaciones'));
     }
