@@ -42,7 +42,7 @@ class PinataService
         return $data['IpfsHash'];
     }
 
-    public function uploadContentToIPFS($content)
+    public function uploadContentToIPFS($content, $filename)
     {
         $tempFilePath = tempnam(sys_get_temp_dir(), 'tempfile');
         file_put_contents($tempFilePath, $content);
@@ -56,7 +56,7 @@ class PinataService
                 [
                     'name' => 'file',
                     'contents' => fopen($tempFilePath, 'r'),
-                    'filename' => 'licencia.pdf',
+                    'filename' => $filename,
                 ]
             ]
         ]);

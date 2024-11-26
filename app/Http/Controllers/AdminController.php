@@ -62,7 +62,7 @@ class AdminController extends Controller
                 if($estadoTramite->nombre == 'Aprobado') {
                     $tramiteNew = Tramite::with('solicitante', 'estadoTramite')->where('id', $request->tramiteId)->first();
                     $pdf = Pdf::loadView('tramite.datos', ['tramite' => $tramiteNew])->setOption(['isRemoteEnabled' => true]);
-                    $ipfsHash = $this->pinataService->uploadContentToIPFS($pdf->output());
+                    $ipfsHash = $this->pinataService->uploadContentToIPFS($pdf->output(), "licencia-" . Str::uuid() . ".pdf");
 
                     $licencia = new Licencia();
                     $licencia->tramite_id = $tramiteNew->id;
