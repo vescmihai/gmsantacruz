@@ -4,11 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 use App\Models\Rol;
+use App\Models\Licencia;
+use App\Models\Tramite;
 
 class User extends Authenticatable
 {
@@ -53,5 +56,13 @@ class User extends Authenticatable
 
     public function rol(): BelongsTo {
         return $this->belongsTo(Rol::class);
+    }
+
+    public function tramites(): HasMany {
+        return $this->hasMany(Tramite::class);
+    }
+
+    public function licencias(): HasMany {
+        return $this->hasMany(Licencia::class);
     }
 }

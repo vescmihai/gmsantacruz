@@ -261,7 +261,7 @@
          
               const data = await response.json();
               if (response.ok) {
-                alert(data.message);
+                prompt(data.message, "{{ env('PINATA_GATEWAY') . '/ipfs/' }}" + data.data);
                 window.location.href = data.redirect;
               } else {
                 alert('Error: ' + data.error);

@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\PinataService;
+
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 use App\Models\EstadoTramite;
+use App\Models\Licencia;
 use App\Models\Notificacion;
 use App\Models\Rol;
 use App\Models\Tramite;
@@ -16,6 +21,13 @@ use App\Models\User;
 
 class AdminController extends Controller
 {
+    protected $pinataService;
+
+    public function __construct(PinataService $pinataService)
+    {
+        $this->pinataService = $pinataService;
+    }
+
     public function index(Request $request) {
         // Get User and Rol for Permission configuration
         $user_id = Auth::id();
@@ -35,6 +47,7 @@ class AdminController extends Controller
         $tramite = Tramite::find($request->tramiteId);
         $tramite->estado_tramite_id = $request->estadoTramiteId;
         $tramite->save();
+        $data = null;
 
         if($request->mensaje) {
             $estadoTramite = EstadoTramite::find($request->estadoTramiteId);
@@ -44,6 +57,35 @@ class AdminController extends Controller
             $notificacion->mensaje = $request->mensaje;
             $notificacion->user_id = $tramite->user_id;
             $notificacion->save();
+
+            try {
+                if($estadoTramite->nombre == 'Aprobado') {
+                    $tramiteNew = Tramite::with('solicitante', 'estadoTramite')->where('id', $request->tramiteId)->first();
+                    $pdf = Pdf::loadView('tramite.datos', ['tramite' => $tramiteNew])->setOption(['isRemoteEnabled' => true]);
+                    $ipfsHash = $this->pinataService->uploadContentToIPFS($pdf->output());
+
+                    $licencia = new Licencia();
+                    $licencia->tramite_id = $tramiteNew->id;
+                    $licencia->user_id = Auth::id();
+                    $licencia->documento = $ipfsHash;
+                    $licencia->valido_hasta = now()->addYear();
+                    $licencia->save();
+ 
+                    return response()->json([
+                        'success' => true,
+                        'data' => $ipfsHash,
+                        'message' => 'Se genero la licencia de funcionamiento correctamente. Puede descargarla en el siguiente enlace:',
+                        'redirect' => route('admin.dashboard')
+                    ]);
+                }
+            } catch(\Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'data' => $e,
+                    'message' => 'Error al guardar el PDF',
+                    'redirect' => route('admin.dashboard')
+                ]);
+            }
         }
 
         return response()->json([
