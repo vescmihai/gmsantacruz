@@ -11,6 +11,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\SolicitanteController;
 use App\Http\Controllers\TipoLicenciaController;
 use App\Http\Controllers\TramiteController;
+use App\Http\Controllers\HomeController;
 
 // No login
 Route::group(['middleware' => 'guest'], function () {
@@ -32,9 +33,7 @@ Route::group(['middleware' => 'auth'], function () {
     })->name('wallet-info');
 
     // Vista de los tipos de licencias
-    Route::get('/licencias', function () {
-        return view('licencias', ['tipos' => TipoLicencia::all()]);
-    })->name('licencias');
+    Route::get('/licencias', [HomeController::class, 'licencias'])->name('licencias');
 
     // Vista para las operaciones del tipo de licencia seleccionada
     Route::get('/tipo', [TipoLicenciaController::class, 'operations'])->name('tipo');
@@ -71,8 +70,6 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 // Any time
-Route::get('/', function () {
-    return view('welcome');
-})->name('ruta.principal');
+Route::get('/', [HomeController::class, 'home'])->name('ruta.principal');
 Route::get('/tramite/{codigo}', [TramiteController::class, 'consulta'])->name('tramite.consulta');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

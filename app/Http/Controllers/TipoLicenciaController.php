@@ -3,18 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\TipoLicencia;
+use App\Models\Notificacion;
+use App\Models\Tramite;
 
 class TipoLicenciaController extends Controller
 {
     public function operations(Request $request){
-        // Revisar que solo sean codigos de la BD
-        $codigoLicencia = $request->query('codigo', 'otros');
-        if(!!!TipoLicencia::where('codigo', $codigoLicencia)->first()){
-            $codigoLicencia = 'otros';
+        $codigo = $request->query('codigo', 'otros');
+        if(!!!TipoLicencia::where('codigo', $codigo)->first()){
+            $codigo = 'otros';
         }
 
-        return view('tipo', ['codigo' => $codigoLicencia]);
+        $user = Auth::user();
+        $tramites = Tramite::with('estadoTramite', 'tipoLicencia')->where('user_id', $user->id)->get();
+        $notificaciones = Notificacion::where('user_id', $user->id)->get();
+
+        return view('tipo', compact('codigo', 'tramites', 'notificaciones'));
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\TipoLicencia;
 use App\Models\Solicitante;
+use App\Models\Notificacion;
 use App\Models\Tramite;
 use App\Models\EstadoTramite;
 
@@ -23,12 +24,16 @@ class SolicitanteController extends Controller
     }
 
     public function index(Request $request){
-        $codigoLicencia = $request->query('codigo', 'otros');
-        if(!!!TipoLicencia::where('codigo', $codigoLicencia)->first()){
-            $codigoLicencia = 'otros';
+        $codigo = $request->query('codigo', 'otros');
+        if(!!!TipoLicencia::where('codigo', $codigo)->first()){
+            $codigo = 'otros';
         }
 
-        return view('solicitante', ['codigo' => $codigoLicencia]);
+        $user = Auth::user();
+        $tramites = Tramite::with('estadoTramite', 'tipoLicencia')->where('user_id', $user->id)->get();
+        $notificaciones = Notificacion::where('user_id', $user->id)->get();
+
+        return view('solicitante', compact('codigo', 'tramites', 'notificaciones'));
     }
 
     public function show(Request $request)
