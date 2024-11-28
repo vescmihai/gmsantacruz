@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Tramite;
 use App\Models\Licencia;
+use App\Models\Notificacion;
 
 class TramiteController extends Controller
 {
@@ -21,7 +22,8 @@ class TramiteController extends Controller
     public function consulta(Request $request){
         $tramite = Tramite::with('solicitante', 'estadoTramite')->where('codigo', $request->codigo)->first();
         if($tramite) {
-            return view('tramite.datos', ['tramite' => $tramite]);
+            $lastNotification = Notificacion::where('tramite_id', $tramite->id)->orWhere('user_id', $tramite->user_id)->orderBy('id', 'DESC')->first();
+            return view('tramite.datos', compact('tramite', 'lastNotification'));
         } 
 
         return redirect()->route('ruta.principal')->with('error', 'No se encontro el tramite.');

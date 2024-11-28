@@ -212,15 +212,22 @@
             @endif</li>
         </ul>
 
-        <div class="d-flex flex-row my-2">
-          <form method="POST" action="{{ route('admin.renewTramite') }}" class="mx-2">
-            <input name="tramiteId" type="hidden" value="{{ $tramite->id }}"/>
-            @csrf
-            <button id="sendButton" type="submit" class="btn btn-primary">Renovar Validez <i class="bi bi-check-circle-fill"></i>
-            </button>
-          </form>
-        </div>
-
+        @if($tramite['estadoTramite']['nombre'] == 'Pendiente')
+          <div class="d-flex flex-row my-2">
+            <form method="POST" action="{{ route('admin.renewTramite') }}" class="mx-2">
+              <input name="tramiteId" type="hidden" value="{{ $tramite->id }}"/>
+              @csrf
+              <button id="sendButton" type="submit" class="btn btn-primary">Renovar Validez <i class="bi bi-check-circle-fill"></i>
+              </button>
+            </form>
+          </div>
+        @endif
+        <br/>
+        <h5>Ultimas notas sobre el trámite</h4>
+          <ul class="list-group">    
+              <li class="list-group-item">{{ $lastNotification['mensaje'] }}</li>
+          </ul>
+        <br/>
         <h4>Datos del Solicitante</h4>
         <ul class="list-group">    
             <li class="list-group-item"><strong>Tipo:</strong> {{ $tramite['solicitante']['tipo'] ?? 'No disponible' }}</li>
@@ -231,7 +238,29 @@
             <li class="list-group-item"><strong>Tercer Apellido:</strong> {{ $tramite['solicitante']['tercer_apellido'] ?? 'No disponible' }}</li>
             <li class="list-group-item"><strong>Dirección:</strong> {{ $tramite['solicitante']['direccion'] ?? 'No disponible' }}</li>
         </ul>
+        <br/>
+
+        <h2>Documentos Adjuntos</h2>
+        <div class="d-flex">
+            <div>
+            <h3>Documento Anverso</h3>
+            @if(isset($tramite['solicitante']['documento_anverso']))
+            <img src="{{ env('PINATA_GATEWAY') . '/ipfs/' . $tramite['solicitante']['documento_anverso'] }}" alt="Documento Anverso" style="max-width: 90%; height: auto;">
+            @else
+            <p>No se ha adjuntado un documento anverso.</p>
+            @endif
+            </div>
+            <div>
+            <h3>Documento Reverso</h3>
+            @if(isset($tramite['solicitante']['documento_reverso']))
+            <img src="{{ env('PINATA_GATEWAY') . '/ipfs/' . $tramite['solicitante']['documento_reverso'] }}" alt="Documento Reverso" style="max-width: 90%; height: auto;">
+            @else
+            <p>No se ha adjuntado un documento reverso.</p>
+            @endif
+            </div>
         </div>
+
+      </div>
     </div>
 
     </main>

@@ -94,6 +94,7 @@ class SolicitanteController extends Controller
         $notificacion->mensaje = "Solicitud ingresada para la generacion de " . $tipoLicencia->nombre . ". Puedes hacer seguimiento con el siguiente código: " . $tramite->codigo;
         $notificacion->enlace = route('tramite.consulta', ['codigo' => $tramite->codigo]);
         $notificacion->user_id = Auth::id();
+        $notificacion->tramite_id = $tramite->id;
         $notificacion->save();
 
         $request->session()->put('datos', $validatedData);

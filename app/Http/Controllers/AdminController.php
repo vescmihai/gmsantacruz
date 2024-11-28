@@ -56,6 +56,7 @@ class AdminController extends Controller
             $notificacion->titulo = "Su trámite ha sido " . $estadoTramite->nombre;
             $notificacion->mensaje = $request->mensaje;
             $notificacion->user_id = $tramite->user_id;
+            $notificacion->tramite_id = $tramite->id;
             $notificacion->save();
 
             try {
@@ -119,10 +120,12 @@ class AdminController extends Controller
         }
         
         if($tramite){
+            $lastNotification = Notificacion::where('tramite_id', $tramite->id)->orWhere('user_id', $tramite->user_id)->orderBy('id', 'DESC')->first();
             return view('admin.tramite.show', [
                 'tramite' => $tramite,
                 'estadoTramites' => $estadoTramites,
-                'user' => $user
+                'user' => $user,
+                'lastNotification' => $lastNotification
             ]);
         } else {
             return redirect()->route('admin.dashboard')->with('message', 'No existe el tramite seleccionado');
