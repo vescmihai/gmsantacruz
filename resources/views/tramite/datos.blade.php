@@ -131,6 +131,12 @@
               @endif</li>
         </ul>
         <br/>
+        @if(isset($licencia))
+            <a type="button" target="_blank" href="{{ env('PINATA_GATEWAY') . '/ipfs/' . $licencia['documento'] }}" class="btn btn-primary w-100 py-lg-3 py-md-2 py-2 shadow-sm">
+                Descargar Licencia <i class="bi bi-check-circle-fill"></i>
+            </a>
+            <br/>
+        @endif
         @if(isset($lastNotification))
             <h5>Ultimas notas sobre el trámite</h4>
             <ul class="list-group">    

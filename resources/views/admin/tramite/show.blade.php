@@ -198,6 +198,12 @@
       @endforeach
       </div>
 
+      @if($licencia)
+        <a type="button" target="_blank" href="{{ env('PINATA_GATEWAY') . '/ipfs/' . $licencia['documento'] }}" class="btn btn-primary w-25 py-lg-3 py-md-2 py-2 shadow-sm mb-4">
+          Descargar Licencia <i class="bi bi-check-circle-fill"></i>
+        </a>
+      @endif
+
       <div class="container">
         <div>
         <h3>Datos Recuperados del Tramite</h3>

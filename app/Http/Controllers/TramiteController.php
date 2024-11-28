@@ -23,7 +23,8 @@ class TramiteController extends Controller
         $tramite = Tramite::with('solicitante', 'estadoTramite')->where('codigo', $request->codigo)->first();
         if($tramite) {
             $lastNotification = Notificacion::where('tramite_id', $tramite->id)->orWhere('user_id', $tramite->user_id)->orderBy('id', 'DESC')->first();
-            return view('tramite.datos', compact('tramite', 'lastNotification'));
+            $licencia = Licencia::with('tramite')->where('tramite_id', $tramite->id)->orderBy('id', 'DESC')->first();
+            return view('tramite.datos', compact('tramite', 'lastNotification', 'licencia'));
         } 
 
         return redirect()->route('ruta.principal')->with('error', 'No se encontro el tramite.');

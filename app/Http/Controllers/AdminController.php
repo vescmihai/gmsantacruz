@@ -121,11 +121,13 @@ class AdminController extends Controller
         
         if($tramite){
             $lastNotification = Notificacion::where('tramite_id', $tramite->id)->orWhere('user_id', $tramite->user_id)->orderBy('id', 'DESC')->first();
+            $licencia = Licencia::with('tramite')->where('tramite_id', $tramite->id)->orderBy('id', 'DESC')->first();
             return view('admin.tramite.show', [
                 'tramite' => $tramite,
                 'estadoTramites' => $estadoTramites,
                 'user' => $user,
-                'lastNotification' => $lastNotification
+                'lastNotification' => $lastNotification,
+                'licencia' => $licencia
             ]);
         } else {
             return redirect()->route('admin.dashboard')->with('message', 'No existe el tramite seleccionado');
