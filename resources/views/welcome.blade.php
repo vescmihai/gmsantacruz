@@ -345,7 +345,7 @@
                     const dataResponse = await responseLicencia.json();
                     if(responseLicencia.ok){
                         // Mostrar mensaje de licencia encontrada
-                        alert('Licencia Encotrada y verificada');
+                        alert('Licencia Encontrada y verificada');
                         window.location.href = "{{ route('tramite.consulta', '') }}" + '/' + dataResponse.licencia['tramite']['codigo'];
                     } else {
                         // Mostrar mensaje de licencia NO encontrada
