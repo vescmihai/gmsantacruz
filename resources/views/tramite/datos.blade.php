@@ -131,11 +131,13 @@
               @endif</li>
         </ul>
         <br/>
-        <h5>Ultimas notas sobre el trámite</h4>
-        <ul class="list-group">    
-            <li class="list-group-item">{{ $lastNotification['mensaje'] }}</li>
-        </ul>
-        <br/>
+        @if(isset($lastNotification))
+            <h5>Ultimas notas sobre el trámite</h4>
+            <ul class="list-group">    
+                <li class="list-group-item">{{ $lastNotification['mensaje'] }}</li>
+            </ul>
+            <br/>
+        @endif
         <h4>Datos del Solicitante</h4>
         <ul class="list-group">    
             <li class="list-group-item"><strong>Tipo:</strong> {{ $tramite['solicitante']['tipo'] ?? 'No disponible' }}</li>
