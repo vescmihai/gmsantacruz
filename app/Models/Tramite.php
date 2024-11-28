@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 use App\Models\EstadoTramite;
+use App\Models\Licencia;
 use App\Models\Solicitante;
 use App\Models\TipoLicencia;
 use App\Models\User;
@@ -37,5 +39,10 @@ class Tramite extends Model
 
     public function estadoTramite(): BelongsTo {
         return $this->belongsTo(EstadoTramite::class);
+    }
+
+    public function licencia(): HasOne
+    {
+        return $this->hasOne(Licencia::class);
     }
 }

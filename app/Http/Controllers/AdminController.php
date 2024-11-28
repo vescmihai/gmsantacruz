@@ -34,7 +34,7 @@ class AdminController extends Controller
         $user = User::with('rol')->find($user_id);
 
         // TODO: Mejorar el panel. Enviando los tramites para cambiarlos de estado
-        $tramites = Tramite::with('estadoTramite', 'solicitante', 'tipoLicencia')->orderBy('id', 'DESC')->get();
+        $tramites = Tramite::with('estadoTramite', 'solicitante', 'tipoLicencia', 'licencia.user')->orderBy('id', 'DESC')->get();
 
         return view('admin.dashboard', [
             'user' => $user,

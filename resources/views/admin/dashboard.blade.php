@@ -207,7 +207,7 @@
                   (Expirado)
                 @endif</td>
                 <td>
-                  {{ $tramite->estadoTramite->nombre }}
+                  {{ $tramite->estadoTramite->nombre }} @if($tramite->licencia) por {{ $tramite->licencia->user->name }} @endif
                 </td>
                 <td>
                   <a href="{{ route('admin.tramite.show', ['id' => $tramite->id]) }}">Ver Tramite</a>
