@@ -32,13 +32,13 @@ class EstadoTramiteSeeder extends Seeder
             'updated_at' => now()
         ]);
 
-        DB::table('estado_tramites')->insert([
-            'nombre' => 'Observado',
-            'descripcion' => 'Estado observado: Comunicarse para indentificar la causa',
-            'color' => '#ffc107',
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+        // DB::table('estado_tramites')->insert([
+        //     'nombre' => 'Observado',
+        //     'descripcion' => 'Estado observado: Comunicarse para indentificar la causa',
+        //     'color' => '#ffc107',
+        //     'created_at' => now(),
+        //     'updated_at' => now()
+        // ]);
 
         DB::table('estado_tramites')->insert([
             'nombre' => 'Rechazado',
