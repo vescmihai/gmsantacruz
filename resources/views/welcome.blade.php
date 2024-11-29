@@ -349,7 +349,7 @@
                         window.location.href = "{{ route('tramite.consulta', '') }}" + '/' + dataResponse.licencia['tramite']['codigo'];
                     } else {
                         // Mostrar mensaje de licencia NO encontrada
-                        alert('Error al verificar la licencia: ' + dataResponse.error);
+                        alert('Licencia Invalida: ' + dataResponse.error);
                         
                         sendButton.style.display = "block";
                         loader.style.display = "none";
